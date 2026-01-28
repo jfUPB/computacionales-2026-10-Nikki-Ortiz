@@ -122,6 +122,8 @@ M=0
 M=1
 
 (FIN)
+@FIN
+0;JMP
 ```
 
 **ANOTACIÓN: En el caso de este codigo pasa que siempre va a tener el 1 guardado en la dirección 7 porque el valor de la memoria 5 por defecto es 0, la condición de que sea menor que 10 siempre se va a cumplir y en vez de seguir al "else" que seria poner en la direccion 7 el valor 0 (que sería como no hacer ningún cambio) este salta al final del programa porque no se cumple esa condición (si ubieramos cargado algun valor a la memoria 5 entonces el programa se saltaria el primer condicional y ejecutaria el segundo) 
@@ -129,11 +131,33 @@ M=1
 
 ## Bitácora de aplicación 
 
-### ACTIVIDAD 04
+### ACTIVIDAD 04  
 
-**INTRUCCIONES:** Crea un programa que use un ciclo para sumar los números del 1 al 5 y guarde el resultado en la dirección de memoria 12.
+**INTRUCCIÓN:** Crea un programa que use un ciclo para sumar los números del 1 al 5 y guarde el resultado en la dirección de memoria 12.  
+
+**¿Qué tengo que hacer para logar el código?**
+
+memoria(12)= 0
+i = 1
+
+while(i<=5){
+memoria(12) = memoria(12) + i
+i = i + 1
+
+}
+
+Al final memoria(12) = 15
+
+Esto significa que en el ciclo necesito que los numeros se sumen del 1-5 hasta que lleguen al resultado de 15 y que cuando llegue a 6 se salga del ciclo y vaya al final, lo cual se puede lograr comparando constantemente las sumas a la condicion que tenemos para hacer el salto. Tener en cuenta que al iniciar la suma en 0 entonces se debe hacer el comparativo con 6 porque en forma de vector el número 5 ocuparía la posición 6. 
+
+**CÓDIGO:**  
+
 
 ``` asm
+// Inicializar suma = 0
+@12
+M=0
+
 // Inicializar contador i = 1
 @i
 M=1
@@ -150,7 +174,7 @@ D;JEQ
 // suma = suma + i
 @i
 D=M
-@sum
+@12
 M=D+M
 
 // i = i + 1
@@ -161,20 +185,14 @@ M=M+1
 @LOOP
 0;JMP
 
-// guardar en la dirección 12 el resultado las sumas
-(END)
-@sum
-D=M
-@12
-M=D
-
 // Fin del programa
-@FINAL
-(FINAL)
+
+(END)
+@END
 0;JMP
 ```
-
 ## Bitácora de reflexión
+
 
 
 
