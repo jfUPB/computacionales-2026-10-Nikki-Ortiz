@@ -191,7 +191,10 @@ M=M+1
 @END
 0;JMP
 ```
+<img width="2472" height="1341" alt="imagen" src="https://github.com/user-attachments/assets/5dcde135-8005-45a8-b8fa-aba3d3423a77" />
+
 ## Bitácora de reflexión
+
 
 
 
