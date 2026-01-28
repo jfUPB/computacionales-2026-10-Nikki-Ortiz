@@ -119,7 +119,7 @@ M=0
 (LESS)
 // Caso: valor < 10
 @7
-=1
+M=1
 
 (FIN)
 ```
@@ -131,5 +131,6 @@ M=0
 
 
 ## Bitácora de reflexión
+
 
 
