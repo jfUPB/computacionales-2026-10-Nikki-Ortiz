@@ -124,6 +124,7 @@ M=1
 (FIN)
 ```
 
+**ANOTACIÓN: En el caso de este codigo pasa que siempre va a tener el 1 guardado en la dirección 7 porque el valor de la memoria 5 por defecto es 0, la condición de que sea menor que 10 siempre se va a cumplir y en vez de seguir al "else" que seria poner en la direccion 7 el valor 0 (que sería como no hacer ningún cambio) este salta al final del programa porque no se cumple esa condición (si ubieramos cargado algun valor a la memoria 5 entonces el programa se saltaria el primer condicional y ejecutaria el segundo) 
 
 
 ## Bitácora de aplicación 
@@ -131,6 +132,7 @@ M=1
 
 
 ## Bitácora de reflexión
+
 
 
 
