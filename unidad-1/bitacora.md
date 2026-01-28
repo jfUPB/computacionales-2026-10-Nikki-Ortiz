@@ -133,9 +133,49 @@ M=1
 
 **INTRUCCIONES:** Crea un programa que use un ciclo para sumar los números del 1 al 5 y guarde el resultado en la dirección de memoria 12.
 
+``` asm
+// Inicializar contador i = 1
+@i
+M=1
 
+(LOOP)
+// Si i > 6, saltar al final
+@i
+D=M
+@6
+D=D-A
+@END
+D;JEQ
+
+// suma = suma + i
+@i
+D=M
+@sum
+M=D+M
+
+// i = i + 1
+@i
+M=M+1
+
+// Volver al inicio del ciclo
+@LOOP
+0;JMP
+
+// guardar en la dirección 12 el resultado las sumas
+(END)
+@sum
+D=M
+@12
+M=D
+
+// Fin del programa
+@FINAL
+(FINAL)
+0;JMP
+```
 
 ## Bitácora de reflexión
+
 
 
 
