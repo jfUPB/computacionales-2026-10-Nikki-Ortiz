@@ -106,7 +106,7 @@ D=M
 @10
 D=D-A
 
-// Si D < 0, saltar a LESS
+// D < 0, saltar a LESS
 @LESS
 D;JLT
 
@@ -131,4 +131,5 @@ M=0
 
 
 ## Bitácora de reflexión
+
 
