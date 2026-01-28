@@ -45,8 +45,90 @@ A: El RAM (Random Access Memories) es un dispositivo de lectura y escritura usad
 
 La respuesta se basó en [COSAIR - ¿Cuál es la diferencia entre RAM y ROM?](https://www.corsair.com/es/es/explorer/diy-builder/memory/whats-the-difference-between-ram-and-rom/#:~:text=Diferencia%20entre%20RAM%20y%20ROM:%20Versi%C3%B3n%20r%C3%A1pida,BIOS%20de%20tu%20placa%20base.)
 
+### ACTIVIDAD 02  
+
+> NOTA: Las respuestas a esta pregunta serán basadas en el libro y el código proporcionados
+
+**Q: Identifica una instrucción que use la ALU y explica qué hace.**  
+
+A: Las intrucciones tipo C nos dicen: que computar, donde guardarlo, y que hacer como siguinete paso:  Instrucción que usa la ALU y su función. Dentro de estás intrucciones esta la "Especificación de Computación"  en la que se encentra la ALU (Unidad Aritmético Lógica). la cual esta diseñada para computar un set fijo de funciones en los registros D, A, y M.
+
+En el caso del ejercicio, ordena a la ALU realizar una resta entre el valor almacenado actualmente en el registro D y el valor en el registro A. El resultado de esta operación se almacena de nuevo en el registro D.
+    
+**Q: ¿Para qué sirve el registro PC?**  
+
+A: el PC (Program Counter) tiene como función contener la dirección de la próxima instrucción que debe ser buscada y ejecutada por la CPU. Normalmente se incrementa de manera automática para ejecutar el programa de forma lineal, pero cuando ocurre algún salto ( JMP, JNE, tc.), el PC se carga con el valor del registro A para cambiar el flujo del programa.  
+
+**Q: ¿Cuál es la diferencia entre @i y @READKEYBOARD?**
+
+A:
+- **@i:** Es una variable definida por el usuario. El ensamblador le asigna una dirección única en la memoria RAM (generalmente a partir de la dirección 16) para almacenar datos que el programa necesita recordar.
+- **@READKEYBOARD:** Es una etiqueta (label) de destino para saltos. Define simbólicamente una dirección en la memoria de instrucciones (ROM) y se utiliza para que el programa sepa a qué punto del código debe regresar o saltar. Es decir, es como decirle al programa "Si pasa X cosa, salta directtamente a la lectura del teclado".
+
+**Q: Describe qué se necesita para leer el teclado y mostrar información en la pantalla.**  
+
+A: De acuerdo con la especificación de Imput/Output en el librp:
+
+- **Para leer el teclado:** Se debe acceder a la dirección de memoria 24576 (identificada por el símbolo predefinido KBD). Si una tecla está presionada, su código ASCII aparece en esa dirección; si no, el valor es 0.
+- **Para mostrar información en pantalla:** Se debe escribir en el segmento de memoria que comienza en la dirección 16384 (símbolo SCREEN). Cada bit en este mapa de memoria representa un píxel en la pantalla física (1 para negro, 0 para blanco).
+
+**Q: Identifica un bucle en el programa y explica su funcionamiento.**  
+
+A: El programa contiene un bucle principal que comienza en la etiqueta (READKEYBOARD) y termina con la instrucción @READKEYBOARD seguida de 0;JMP al final del código. Este es un bucle infinito donde el programa lee constantemente el estado del teclado (@KBD, D=M). Si no se detecta ninguna tecla presionada, el flujo continúa para limpiar o retroceder la posición en pantalla y luego vuelve al inicio para verificar el teclado nuevamente.
+
+
+**Q: Identifica una condición en el programa y explica su funcionamiento.**  
+
+A: Una condición se encuentra en el bloque:
+
+``` asm
+@KBD
+D=M
+@KEYPRESSED
+D;JNE
+```
+
+1. Primero, carga el valor actual del teclado en el registro D.
+2. Luego, utiliza la instrucción de salto condicional JNE (Jump if Not Equal).
+3. La condición es: Si el valor en D no es cero (es decir, si D es diferente de 0, lo que significa que se ha presionado una tecla), el programa salta a la sección etiquetada como (KEYPRESSED). Si el valor es cero, la condición no se cumple y el programa sigue con la siguiente instrucción de forma secuencial.
+
+
+### ACTIVIDAD 03
+   
+**INSTRUCCION:** Escribe un programa que compare el valor almacenado en la dirección de memoria 5 con el valor 10. Si el valor es menor que 10, guarda el valor 1 en la dirección 7. Si el valor es mayor o igual a 10, guarda el valor 0 en la dirección 7.
+
+**CÓDIGO COMENTADO:**
+
+``` asm
+// Cargar el valor de la dirección 5
+@5
+D=M
+@10
+D=D-A
+
+// Si D < 0, saltar a LESS
+@LESS
+D;JLT
+
+// Caso: valor >= 10
+@7
+M=0
+@FIN
+0;JMP
+
+(LESS)
+// Caso: valor < 10
+@7
+=1
+
+(FIN)
+```
+
+
+
 ## Bitácora de aplicación 
 
 
 
 ## Bitácora de reflexión
+
