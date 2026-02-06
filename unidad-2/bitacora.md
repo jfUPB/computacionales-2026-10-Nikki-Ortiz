@@ -94,12 +94,59 @@ M=D
 (END)
 0;JMP
 ```
+### ACTIVIDAD 05
 
+**INTRUCCIONES:** Convierte estos programas a ensamblador y realiza la simulación paso a paso. Recuerda la metodología: predice, ejecuta, observa y reflexiona.  
 
+ **TRADUCCIÓN #1:**
+``` asm
+// int a = 10 
+@10
+D=A
+@a
+M=D
+//  int* p; y p = &a;
+@a
+D=A
+@p
+M=D
+// *p = 20;
+@20
+D=A
+// Tener A el valor asignado en p 
+@p
+A=M
+M=D
+```
 
+**TRADUCCIÓN #2:**  
+``` asm
+//int a = 10 
+@10
+D=A
+@a
+M=D
+// int b = 5
+@5
+D=A
+@b
+M=D
+//  int *p; y p = &a;
+@a
+D=A
+@p
+M=D
+// *p = 20; b = *p;
+@p // A= contenido de p, pero p contiene la direccion de a
+A=M // A=16
+D=M // D= Contenido de la direccion 16
+@b // A = la direccion de b ---> 17
+M=D // Guardando en la 17 que es b el 10 que se tiene en D
+```
 
 ## Bitácora de aplicación 
 
 
 
 ## Bitácora de reflexión
+
