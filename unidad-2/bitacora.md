@@ -517,5 +517,9 @@ A=M
 
 ### ACTIVIDAD 09
 
+<img width="2151" height="1167" alt="imagen" src="https://github.com/user-attachments/assets/ac51fcbc-05c3-47d4-be7d-eb81ca44caad" />
+preguntar como exportar el bitmaap a nand2
+
+
 
 
