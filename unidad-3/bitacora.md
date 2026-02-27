@@ -1,3 +1,5 @@
+Nota del profesor: sin evidencia en la fase de aplicación
+
 # Unidad 3
 
 ## Bitácora de proceso de aprendizaje
@@ -67,3 +69,4 @@ swapPorPuntero(&a, &b);
 
 
 ## Bitácora de reflexión
+
