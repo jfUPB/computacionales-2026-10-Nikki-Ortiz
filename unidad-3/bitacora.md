@@ -989,9 +989,42 @@ int main() {
 }
 ```
 En conclusión, se realizó la Eliminación de Fugas de Memoria usando un array que hace que no se requiera un  destructor manual "(delete[])". Lo que resulta en que cuando el objeto Personaje sale del Stack al finalizar "simularEncuentro()", sus estadísticas desaparecen automáticamente con él. Adicionalmente, se solucionó la copia de manera erronea y ahora al ejecutar Personaje "copiaHeroe = heroe;", C++ crea un bloque de memoria totalmente nuevo para la copia y clona los valores uno a uno, lo que debería evidenciarse al modificar "copiaHeroe.estadisticas[0]", la vida del heroe original permanecerá intacta y no habrá punteros duplicados peleando por la misma dirección.
+</details>  
 
-## Bitácora de reflexión
+## Bitácora de reflexión  
+
+### ACTIVIDAD 11
+
+**PARTE 1 - PREGUNTAS**  
+
+**Q: Explica con tus propias palabras qué es el stack y qué es el heap en C++. (Complemento de lo que s emencionó más arriba)**
+
+A: El stack (pila) es la parte de memoria que se usa para guardar variables locales y las llamadas a funciones; Es automática, cuando se entra a una función, se reservan sus variables en el stack, y cuando la función termina, esa memoria se libera sola, además de ser rápida y ordenada. El heap, en cambio, es la memoria que se maneja manualmente con new y delete. Aquí se guardan datos que necesitan vivir más tiempo o cuyo tamaño no conozco en tiempo de compilación. No se libera sola, así que si no se usa delete, puedo tener fugas de memoria.
+
+- Stack --> automática y temporal.
+- Heap --> dinámica y controlada por el programador.
+
+**Q: Describe las tres formas de pasar parámetros a una función en C++ (valor, referencia y puntero). Para cada una, explica qué sucede en memoria y cuándo usarías cada método.**
+
+A: De la siguiente manera:
+
+- Paso por valor: En memoria: se crea otra variable x dentro del stack de la función. Si modifico x, no cambia la variable original. Yo usaría paso por valor cuando el dato es pequeño (como int, char, etc.) y no necesito modificar el original.
+  
+- Paso por referencia (Se usa &): Es como un alias, no se crea una copia, sino que la función trabaja directamente con la variable original. En memoria, básicamente se usa la misma dirección. Yo lo usaría cuando quiera modificar el valor original y no quiera hacer copia porque el objeto es grande (como un vector o una clase grande).
+
+- Paso por puntero (se pasa la dirección de memoria usando): Aquí se copia el puntero, pero el puntero apunta a la misma dirección de memoria del dato original. Entonces puedo modificar el contenido usando *. Lo usaría cuando mecesito trabajar explícitamente con direcciones y este trabajado con memoria dinámica.
+
+**Q: ¿Qué diferencia hay entre una variable local, una variable global y una variable local estática? ¿En qué segmento del mapa de memoria se almacena cada una?**
+
+| Variable Local                               | Variable Global                                                              | Variable Local Estática              |
+|  ---                                         |      ---                                                                     |          ---                         |           
+| Vive solo mientras se ejecuta la función.    | Vive durante todo el programa.                                               | Vive durante todo el programa.       |
+| Se guarda en el stack.                       | Se guarda en el segmento de datos de la memoria.                             | Conserva su valor entre llamadas.    |
+| Se destruye al salir de la función.          | Puede ser usada por varias funciones (aunque no siempre es buena práctica).  |Solo es visible dentro de la función. |
 
 
+**Q: Explica qué es un objeto en C++ desde la perspectiva de memoria. ¿Dónde se almacenan los miembros de instancia y dónde los miembros estáticos?**
+
+A: Un objeto en C++ es un bloque de memoria que guarda los datos propios de una clase. Cuando se crea un objeto, se reserva espacio para sus miembros de instancia, y cada objeto tiene su propia copia de esos datos. Los miembros estáticos no se guardan dentro del objeto, porque pertenecen a la clase completa. Por eso se almacenan en una zona de memoria aparte y son compartidos por todos los objetos.
 
 
