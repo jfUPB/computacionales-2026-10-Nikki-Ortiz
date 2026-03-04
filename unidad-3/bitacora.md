@@ -155,8 +155,8 @@ int main() {
 - ¿Por qué ocurre? Ocurre por dos razones principales, una de Hardware y otra de Software: La primera es porque como se mencionó en la descripción del mapa de memoria, el Segmento de Código se marca como "Solo Lectura" en la tabla de páginas de la memoria gestionada por el Sistema Operativo. la segunda es que cuando el procesador intenta ejecutar la instrucción de escribir (= 0) en esa dirección, la Unidad de Gestión de Memoria (MMU) detecta que esa zona está protegida. El procesador lanza una alerta y el Sistema Operativo, para proteger la integridad de la computadora, "mata" tu programa inmediatamente.
 </details>
 
-<details>
 
+<details>
 <summary>Experimento 2</summary>
 
 ### Modificar el segmento de datos (constante global):
@@ -203,7 +203,6 @@ int main() {
 </details>
 
 <details>
-
 <summary>Experimento 3</summary>
 
 ### Modificar el segmento de datos (variables globales):
@@ -256,9 +255,9 @@ global_no_inicializada = 666; --> Lo mismo ocurre aquí y el programa le asigna 
 
 ¿Por qué ocurre? Esto ocurre porque las variables globales sí pueden modificarse durante la ejecución del programa, ya que ambas están en la zona de datos globales, que es una región de memoria escribible, por eso se pueden cambiar sin problema, "global_inicializada" empieza en 42 porque fue declarada con un valor inicial y "global_no_inicializada" aparece como 0 porque las variables globales que no se inicializan explícitamente se inicializan automáticamente en 0.
 </details>
+
     
 <details>
-    
 <summary>Experimento 4</summary>
 
 ### Modificar la variable local estática de una función por fuera de ella:
@@ -301,6 +300,7 @@ int main() {
 ¿Qué pasa con las variables cada que entras y sales de la función? Las variables locales normales (no estáticas) se crean cada vez que entras a la función y se destruyen cuando sales de ella
 ¿Qué pasa con las variables locales estáticas? Las variables locales estáticas se crean una sola vez y conservan su valor entre llamadas a la función
 </details>
+
 
 <details>
 <summary>Experimento 5</summary>
@@ -401,8 +401,9 @@ El código suelta error porque se intenta usar un puntero que no tiene contenido
 ¿Qué consecuencias tendría no liberar la memoria reservada con new? Se produce una fuga de memoria, provocando que el software consuma cada vez más recursos con el tiempo. Esto suele derivar en un rendimiento lento, inestabilidad o el bloqueo del sistema
 
 ¿Por qué es importante usar delete[] al liberar memoria asignada para un arreglo? Porque new int[tam] reserva un arreglo (varios elementos), delete[] le dice al sistema: “voy a liberar todo el arreglo correctamente”. Si usas delete en vez de delete[], estás liberando “como si fuera un solo elemento” y no todo el conjunto
+</details>
 
----  
+---   
 
 ### ACTIVIDAD 5
 
@@ -623,5 +624,6 @@ int main() {
 
 
 ## Bitácora de reflexión
+
 
 
