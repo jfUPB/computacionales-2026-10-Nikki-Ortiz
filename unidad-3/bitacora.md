@@ -614,16 +614,384 @@ int main() {
 ```
 </details>
 
+**PREGUNTAS**
 
+**Q: Abre la calculadora de Windows y selecciona el modo de programador. Cambia a modo hexadecimal. Escribe 0a ¿Qué valor en decimal obtienes? Escribe 14 ¿Qué valor en decimal obtienes? ¿Qué observas?**
 
+A: Se observa que 0a = 10, 14 = 20, por tanto, los valores de x & y se están almacenados directamente en memoria como enteros.
 
+**Q: Si la arquitectura de tu computador fuera big-endian, ¿Cómo quedarían almacenados los bytes en la memoria de p?**
 
+A: Los bytes en la memoria p quedarían almacenados como:  **00 00 00 0a 00 00 00 14**
+
+**Reflexiona sobre las siguientes cuestiones:**
+
+**Q:¿Cuál es la diferencia entre un constructor y un destructor en C++?**
+
+A: En C++ los **Constructores** tienen como propósito inicializar un objeto y asignar recursos, esto se da cuando se cre< un objeto. Mientras que los **Destructores** se dan al momento de destruir el objeto (sale de ámbito o se borra, cuando termina el main) y se usa para liberar recursos y limpiar la memoria de ser necesario.
+
+**Q: ¿Cuál es la diferencia entre un objeto y una clase en C++?**
+
+A: Clase es el molde o plantilla (define qué tendrá el objeto), y objeto es la instancia real creada a partir de la clase.
+
+**Q: ¿Qué diferencia notas entre el objeto Punto en C++ y C#?**
+
+en C++ esta almacenada en el stack y es el objeto mismo, en C#, p no es el objeto sino una referencia, el objeto real esta en el heap
+
+**Q: ¿Qué es p en C++ y qué es p en C#?**
+
+A: en C++, p es un objeto y en C#, p es una referencia a un objeto
+
+**Q:¿En qué parte de memoria se almacena p en C++ y en C#?**
+
+A: en C++, p esta en el stack y en C#, p esta en el heap
+
+**Q: ¿Qué observaste con el depurador acerca de p? Según lo que observaste ¿Qué es un objeto en C++?**
+
+El depurador muestra que p ocupa espacio real en memoria, sus datos están almacenados directamente de forma contigua, no es un puntero ni una referencia, sino que es una estructura de datos con sus miembros almacenados uno después del otro.
+
+---
+
+### ACTIVIDAD 07 
+
+<details>
+
+<summary>CÓDIGO</summary>
+
+```c+
+   #include <iostream>
+using namespace std;
+
+class Punto {
+public:
+    int x;
+    int y;
+
+    // Constructor
+    Punto(int _x, int _y) : x(_x), y(_y) {
+        cout << "Constructor: Punto(" << x << ", " << y << ") creado." << endl;
+    }
+
+    // Destructor
+    ~Punto() {
+        cout << "Destructor: Punto(" << x << ", " << y << ") destruido." << endl;
+    }
+
+    // Método para imprimir valores
+    void imprimir() {
+        cout << "Punto(" << x << ", " << y << ")" << endl;
+    }
+};
+
+int main() {
+    // Objeto en el stack
+    Punto pStack(30, 40);
+    pStack.imprimir();
+
+    // Objeto en el heap
+    Punto* pHeap = new Punto(50, 60);
+    pHeap->imprimir();
+
+    // Coloca breakpoints en la creación de pStack y pHeap
+    // Inspecciona las direcciones de memoria de ambos objetos:
+    // - pStack: dirección obtenida directamente.
+    // - pHeap: la variable pHeap es un puntero que contiene la dirección del objeto en el heap.
+
+    // Recuerda liberar la memoria del heap
+    delete pHeap;
+
+    return 0;
+}
+```
+
+</details>
+
+**Q: Explicación de la diferencia entre objetos creados en el stack y en el heap**
+
+| Stack                                       | Heap                                                         |
+| ------------------------------------------- | -----------------------------------------------------------  |
+| cuando main termina se llama el destructor  | si no se hace detele, solo queda ocupando memoria            |
+| se crea autamaticamente                     | se crea manualmente usando new                               |
+| su direccion se obtiene con &pStack         | pHeap guarda la direccion del objeto real que esta en el heap|
+| Punto pStack (30, 40);                      | Punto* pHeap = new Punto(50, 60);                            |
+| vive solo dentro de main                    | vive hasta que se borre con delete                           |
+
+**Q: pStack ¿Es un objeto o una referencia a un objeto?**
+A: pStack es un objeto que esta guardado directamente en el stack
+**Q: pHeap ¿Es un objeto o una referencia a un objeto? Si es una referencia, ¿A qué objeto hace referencia?**
+A: pHeap es una referencia / puntero a un objeto, hace referencia referencia al objeto Punto(50,60) que está en el heap
+**Q: Observa en Memory1 (Debug->Windows->Memory->Memory1) el contenido de la dirección de memoria de pHeap, recuerda escribir en la entrada de texto de Memory1 la dirección de memoria de &pHeap y presionar Enter. Compara el contenido de memoria con el contenido de pHeap en la pestaña de Locals (Debug->Windows->Locals). ¿Qué observas? ¿Qué significa esto?**
+A: En locals, pHeap se muestra algo como 0x00000162f6545160{x=50 y=60} En Memory1, al mirar &pHeap, lo que aparece guardado ahí es 60 51 54 f6 62 01 00 00, lo que seria la dirección del objeto en little endidan seria 00 00 01 62 f6 54 51 60, lo que en hexadecimal seria 00 00 01 62 f6 54 51 60, Exactamente el valor que tenía pHeap en locals
+
+---
+
+### ACTIVIDAD 08
+
+### ACTIVIDAD 09
 
 ## Bitácora de aplicación 
 
+### ACTIVIDAD INTEGRADORA DE APLICACIÓN 02
 
+<details>
+
+<summary>PASO 1</summary>
+
+### Diagnóstico del problema (análisis):
+
+ERROR 1 - Fuga de Memoria (Memory Leak): Con este error la predicción sería que si en el juego se crean muchos NPCs, la memoria RAM se llenará progresivamente hasta que el motor se quede sin recursos y colapse. Esto ocurre ya que en el constructor, se usa "estadisticas = new int[3]" Lo cual reserva espacio en el Heap. Cuando la función "simularEncuentro" termina, el objeto heroe se destruye del Stack, pero el bloque de memoria en el Heap sigue ocupado. Por lo que, al no existir un "Destructor (~Personaje())" que ejecute delete[] estadisticas, el puntero desaparece pero la memoria queda "huérfana" porque el espacio esta ocupado pero sin objeto, ocacionando que la clase Personaje solicita memoria en el constructor, pero no tiene un mecanismo para devolverla.
+
+ERROR 2 - Copia Incorrecta: Este error, en el escenario de una compañia de videojuegos provocaría problemas relacionados con la corrupción de datos y con cierres inesperados (Crashes) del motor de juego, en el caso particular del código este es el error que causa el "crash" inmediato y ocurre al ejecutar "Personaje copiaHeroe = heroe;". Sucede cuando C++ realiza una copia automática de todos los miembros, entonces, como "estadisticas" es un puntero (una dirección de memoria) y "copiaHeroe" recibe exactamente la misma dirección que heroe, ambos objetos terminan apuntando al mismo bloque de memoria en el Heap. Practicamente, es como si uno modificaraa los datos, el otro ve esos cambios sin saberlo, lo que resulta que al final, cuando ambos objetos intentan destruirse, el sistema intenta liberar la misma memoria dos veces y ocaciona un cierre súbito del programa.
+</details>
+
+<details>
+
+<summary>PASO 2</summary>
+
+### Uso del Depurador, Capturas de Pantalla y Análisis 
+
+<img width="2489" height="1134" alt="ERROR 1" src="https://github.com/user-attachments/assets/124a4bef-085b-463e-a5ff-1f7dc5516c4a" />
+
+En esta imagen se muestra como se reservo la memoria dinámica.
+
+<img width="1237" height="341" alt="ERROR 2" src="https://github.com/user-attachments/assets/3201439a-38f0-4c88-ac47-4d0a877ee026" />
+ Acá se muestra que el personaje de Aragorn y la Copia tienen la misma dirección en "Estadisticas"
+
+</details>
+
+<details>
+
+<summary>PASO 3</summary>
+
+### Induce los fallos:
+
+**CÓDIGO**
+
+```C++
+#include <iostream>
+#include <string>
+
+class Personaje {
+public:
+    std::string nombre;
+    int* estadisticas;
+
+    Personaje(std::string n, int vida, int ataque, int defensa) {
+        nombre = n;
+        estadisticas = new int[3];
+        estadisticas[0] = vida;
+        estadisticas[1] = ataque;
+        estadisticas[2] = defensa;
+        std::cout << "Constructor: nace " << nombre << std::endl;
+    }
+
+    void imprimir() {
+        std::cout << "Personaje " << nombre
+            << " [Vida: " << estadisticas[0]
+            << ", ATK: " << estadisticas[1]
+            << ", DEF: " << estadisticas[2]
+            << "]" << std::endl;
+    }
+};
+
+void simularEncuentro() {
+    std::cout << "\n--- Iniciando encuentro ---" << std::endl;
+    Personaje heroe("Aragorn", 100, 20, 15);
+
+    Personaje copiaHeroe = heroe;
+    copiaHeroe.nombre = "Copia de Aragorn";
+
+    std::cout << "Saliendo del encuentro..." << std::endl;
+}
+
+int main() {
+    for (int i = 0; i < 200000; i++) { // Se agregó esta línea
+    simularEncuentro();
+    std::cout << "\nSimulación terminada." << std::endl;
+    return 0;
+}
+```
+¿QUÉ VA A PASAR? ¿POR QUÉ?
+
+Al inducir este error debría pasar un Agotamiento de Memoria (Memory Leak) ya que cada vez que se llama a "simularEncuentro()", el programa reserva memoria en el Heap para 3 enteros (new int[3]). Como la clase Personaje no tiene un destructor que libere esa memoria (delete[]), multiplicar esos bytes por 200,000 veces creará una fuga masiva y generará un crash.
+
+**EVIDENCIA**  
+
+
+<img width="400" height="600" alt="ANTES (CON EL BREAKPOINT DONDE SE SALTABA LA LINEA DEL ERROR" src="https://github.com/user-attachments/assets/8b5d905a-108d-4220-a558-1fd366aa9487" />
+
+<img width="400" height="600" alt="DESPUÉS" src="https://github.com/user-attachments/assets/23c01946-8fca-4730-9b36-547a36f622d3" />
+
+---  
+**CÓDIGO**
+
+```C++
+#include <iostream>
+#include <string>
+
+class Personaje {
+public:
+    std::string nombre;
+    int* estadisticas;
+
+    Personaje(std::string n, int vida, int ataque, int defensa) {
+        nombre = n;
+        estadisticas = new int[3];
+        estadisticas[0] = vida;
+        estadisticas[1] = ataque;
+        estadisticas[2] = defensa;
+        std::cout << "Constructor: nace " << nombre << std::endl;
+    }
+
+    void imprimir() {
+        std::cout << "Personaje " << nombre
+            << " [Vida: " << estadisticas[0]
+            << ", ATK: " << estadisticas[1]
+            << ", DEF: " << estadisticas[2]
+            << "]" << std::endl;
+    }
+};
+
+void simularEncuentro() {
+    std::cout << "\n--- Iniciando encuentro ---" << std::endl;
+    Personaje heroe("Aragorn", 100, 20, 15);
+
+    Personaje copiaHeroe = heroe;
+    copiaHeroe.nombre = "Copia de Aragorn";
+    
+    copiaHeroe.estadisticas[0] = 561532; // vida, aqui empieza lo que se añadió
+    heroe.imprimir();
+    copiaHeroe.imprimir(); // acá termina
+
+    std::cout << "Saliendo del encuentro..." << std::endl;
+}
+
+int main() {
+        simularEncuentro();
+        std::cout << "\nSimulación terminada." << std::endl;
+        return 0;
+   
+}
+
+```
+ ¿QUÉ SUCEDE?
+
+Aunque solo se escribió copiaHeroe.estadisticas[0] = 561532;, al llamar a heroe.imprimir(), el héroe también tiene esa vida. Esto prueba que ambos objetos comparten la misma dirección de memoria. No son dos personajes independientes, son dos nombres apuntando a la misma dirección de estadísticas en el Heap.
+
+<img width="926" height="574" alt="ERROR 2" src="https://github.com/user-attachments/assets/b414ddd5-c80a-466e-94d4-4f9c281ee1d1" />
+
+</details>
+
+<details>
+
+<summary>PASO 4 y 5 </summary>
+
+### Solución, refactorización (síntesis y creación) y justificación
+
+**ERROR 1:**
+
+En este caso en lugar de intentar corregir el problema agregando destructor y manejando manuealmente new y delete[], seria mejor eliminar la gestion manual de memoria dinamica dado que el arreglo de estadisticas tiene un tamaño fijo, entonces estaríamos reemplazando:
+
+```c++
+int* estadisticas;
+```
+por algo como un arreglo que permita almacenar las estadisticas directamente dentro del objeto, y que evita el uso de new y delete, permitiendo que la copia del objeto sea segura
+
+```c++
+std::array<int, 3> estadisticas;
+```
+
+**CÓDIGO REFACTORIZADO**
+
+```c++
+#include <iostream>
+#include <string>
+#include <array>
+
+class Personaje {
+public:
+    std::string nombre;
+    std::array<int, 3> estadisticas; // [vida, ataque, defensa]
+
+    Personaje(const std::string& n, int vida, int ataque, int defensa)
+        : nombre(n), estadisticas{vida, ataque, defensa} {
+        std::cout << "Constructor: nace " << nombre << std::endl;
+    }
+
+    void imprimir() const {
+        std::cout << "Personaje " << nombre
+            << " [Vida: " << estadisticas[0]
+            << ", ATK: " << estadisticas[1]
+            << ", DEF: " << estadisticas[2]
+            << "]" << std::endl;
+    }
+};
+```
+**ERROR 2**
+
+En este caso vamos a eliminar el puntero dinamico y usar un arreglo para que sea seguro cuando se haga la copia del heroe, se copia el nombre, los 3 enteros de estadisticas y cada objeto tiene su propio almacenamiento independiente.
+
+
+```c++
+std::array<int, 3> estadisticas;
+```
+
+**CÓDIGO MODIFICADO**
+
+```c++
+#include <iostream>
+#include <string>
+#include <array>
+
+class Personaje {
+public:
+    std::string nombre;
+    std::array<int, 3> estadisticas; // [vida, ataque, defensa]
+
+    // Constructor (sin new, sin delete)
+    Personaje(const std::string& n, int vida, int ataque, int defensa)
+        : nombre(n), estadisticas{ vida, ataque, defensa } {
+        std::cout << "Constructor: nace " << nombre << std::endl;
+    }
+
+    // (No hace falta destructor: no hay memoria dinámica manual)
+    // (No hace falta constructor de copia ni operador de asignación:
+    //  std::string y std::array copian correctamente)
+
+    void imprimir() const {
+        std::cout << "Personaje " << nombre
+            << " [Vida: " << estadisticas[0]
+            << ", ATK: " << estadisticas[1]
+            << ", DEF: " << estadisticas[2]
+            << "]" << std::endl;
+    }
+};
+
+void simularEncuentro() {
+    std::cout << "\n--- Iniciando encuentro ---" << std::endl;
+
+    Personaje heroe("Aragorn", 100, 20, 15);
+    heroe.imprimir();
+
+    // Ahora la copia es segura (copia real de estadisticas)
+    Personaje copiaHeroe = heroe;
+    copiaHeroe.nombre = "Copia de Aragorn";
+
+    copiaHeroe.imprimir();
+
+    std::cout << "Saliendo del encuentro..." << std::endl;
+}
+
+int main() {
+    simularEncuentro();
+    std::cout << "\nSimulación terminada." << std::endl;
+    return 0;
+}
+```
+En conclusión, se realizó la Eliminación de Fugas de Memoria usando un array que hace que no se requiera un  destructor manual "(delete[])". Lo que resulta en que cuando el objeto Personaje sale del Stack al finalizar "simularEncuentro()", sus estadísticas desaparecen automáticamente con él. Adicionalmente, se solucionó la copia de manera erronea y ahora al ejecutar Personaje "copiaHeroe = heroe;", C++ crea un bloque de memoria totalmente nuevo para la copia y clona los valores uno a uno, lo que debería evidenciarse al modificar "copiaHeroe.estadisticas[0]", la vida del heroe original permanecerá intacta y no habrá punteros duplicados peleando por la misma dirección.
 
 ## Bitácora de reflexión
+
 
 
 
