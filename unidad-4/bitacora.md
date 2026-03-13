@@ -238,8 +238,6 @@ void ofApp::draw() {
 		index++;
 	}
 
-	//ofSetColor(255);
-	//ofDrawBitmapString("maxSize = " + ofToString(strokes.maxSize), 20, 20);
 }
 
 //--------------------------------------------------------------
@@ -368,9 +366,16 @@ Se observa en las  imagenes que el puntero current recorre todos los nodos de la
 
 ### Evidencia 6: limpieza total de la memoria (clear)
 
+ANTES:
 
+<img width="1670" height="773" alt="imagen" src="https://github.com/user-attachments/assets/cb9f58d1-4467-45f5-8d1f-e95db0ee75e2" />
 
+DESPUÉS:
 
+<img width="1545" height="610" alt="imagen" src="https://github.com/user-attachments/assets/a4a9cca6-5c6b-4f39-b3e7-fb077fde6a1e" />
+<img width="1498" height="210" alt="imagen" src="https://github.com/user-attachments/assets/527ef439-83b5-4151-8138-934dc1eb46a7" />
+
+la imagen muestra como al precionar c y ejecutar la función clear(), el programa utiliza un bucle while que invoca dequeue() de forma ducesiva hasta vaciar la estructura, lo que garantiza que no queden fugas de memoria (memory leaks). Esto valida que la implementación cumple con el enunciado al asegurar que el programa pueda liberar todos sus recursos dinámicos, dejando la estructura BrushQueue en un estado limpio, consistente y listo para ser destruido por el destructor (~BrushQueue).
 
 </details>
 
